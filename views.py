@@ -6,6 +6,6 @@ class Index:
         return '200 OK', render('index.html', date=request.get('date', None))
 
 
-class About:
+class Contact:
     def __call__(self, request):
-        return '200 OK', 'about'
+        return '200 OK', render('contact.html', date=request.get('date', None))
