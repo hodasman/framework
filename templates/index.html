@@ -1,48 +1,24 @@
-<!DOCTYPE HTML>
-<html>
+{% extends 'base.html' %}
+{% block content %}
+<h1>Welcome to our family</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
+    optio est esse? Veritatis laborum expedita
+    quibusdam numquam! Expedita amet nisi dolor similique autem, mollitia
+    ipsa et, natus vel explicabo
+    reprehenderit?
+</p>
 
-<head>
-  {% block title %}School-skill{% endblock %}
-  <meta name="description" content="website " />
-  <meta name="keywords" content="website keywords, website keywords" />
-  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
-  {% block css %}
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
-<!--  <link rel="stylesheet" href="style/style.css" />-->
-  {% endblock %}
-</head>
-
-<body>
-  <div id="main">
-    <div id="header">
-      <div id="logo">
-        <h1>School-skill</h1>
-        <div class="slogan">Cool slogan goes here!</div>
-      </div>
-      <div id="menubar">
-        <ul id="menu">
-          <!-- put class="current" in the li tag for the selected page - to highlight which page you're on -->
-          <li class="current"><a href="/">Home</a></li>
-          <li><a href="contact/">Contact Us</a></li>
-        </ul>
-      </div>
-    </div>
-    <div id="site_content">
-      <div id="sidebar_container">
-
-        <div class="sidebar">
-        <!-- insert your sidebar items here -->
-        </div>
-      </div>
-      <div id="content">
-        <!-- insert the page content here -->
-
-      </div>
-    </div>
-    <div id="footer">
-      <p>Copyright &copy; simplestyle_7 | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">Website templates</a></p>
-    </div>
-  </div>
-</body>
-</html>
+<h2>What do we offer</h2>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
+    optio est esse? Veritatis laborum expedita
+    quibusdam numquam! Expedita amet nisi dolor similique autem,
+    ipsa et, natus vel explicabo
+    reprehenderit?
+</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur
+    optio est esse? Veritatis laborum expedita
+    quibusdam numquam! Expedita amet nisi dolor similique autem, mollitia
+    ipsa et, natus vel explicabo
+    reprehenderit?
+</p>
+{% endblock content %}

@@ -1,18 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% block title %}School-skill{% endblock %}
-  <meta name="description" content="website " />
-  <meta name="keywords" content="website keywords, website keywords" />
-  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
-  {% block css %}
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
-  <link rel="stylesheet" href="style/style.css" />
-  {% endblock %}
-</head>
-<body>
+<!DOCTYPE HTML>
+<html>
 
+<head>
+    {% block title %}School-skill{% endblock %}
+    <meta name="description" content="website "/>
+    <meta name="keywords" content="website keywords, website keywords"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    {% include 'style.html' %}
+</head>
+
+<body>
+<div id="main">
+    <div id="header">
+        <div id="logo">
+            <h1>School-skill</h1>
+            <div class="slogan">Cool slogan goes here!</div>
+        </div>
+        {% include 'main_menu.html' %}
+    </div>
+    <div id="site_content">
+        {% include 'sidebar.html' %}
+
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+    {% include 'footer.html' %}
+</div>
 </body>
 </html>
