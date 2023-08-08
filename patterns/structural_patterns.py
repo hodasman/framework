@@ -1,29 +1,32 @@
 from time import time
+
 from patterns.creational_patterns import Logger
 
 logger = Logger('main')
 
+
 # структурный паттерн - Декоратор
 class AppRoute:
-    def __init__(self, routes, url):
+    routes = {}
+
+    def __init__(self, url):
         '''
         Сохраняем значение переданного параметра
         '''
-        self.routes = routes
+
         self.url = url
 
     def __call__(self, cls):
         '''
         Сам декоратор
         '''
-        self.routes[self.url] = cls()
+        AppRoute.routes[self.url] = cls()
 
 
 # структурный паттерн - Декоратор
 class Debug:
 
     def __init__(self, name):
-
         self.name = name
 
     def __call__(self, cls):
@@ -37,6 +40,7 @@ class Debug:
             нужен для того, чтобы декоратор класса wrapper обернул в timeit
             каждый метод декорируемого класса
             '''
+
             def timed(*args, **kw):
                 ts = time()
                 result = method(*args, **kw)

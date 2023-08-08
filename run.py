@@ -2,10 +2,10 @@ from wsgiref.simple_server import make_server
 
 from framework.main import Framework
 from urls import fronts
-from  views import routes
+from  views import AppRoute
 
 
-application = Framework(routes, fronts)
+application = Framework(AppRoute.routes, fronts)
 
 with make_server('', 8080, application) as httpd:
     print("Запуск на порту 8080...")

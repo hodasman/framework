@@ -7,10 +7,9 @@ from patterns.structural_patterns import AppRoute, Debug
 site = Engine()
 logger = Logger('main')
 
-routes = {}
 
 # контроллер - главная страница
-@AppRoute(routes=routes, url='/')
+@AppRoute(url='/')
 class Index:
     @Debug(name='Index')
     def __call__(self, request):
@@ -18,7 +17,7 @@ class Index:
 
 
 # контроллер "контакты"
-@AppRoute(routes=routes, url='/contact/')
+@AppRoute(url='/contact/')
 class Contact:
     @Debug(name='Contact')
     def __call__(self, request):
@@ -26,7 +25,7 @@ class Contact:
 
 
 # контроллер - Расписания
-@AppRoute(routes=routes, url='/study-programs/')
+@AppRoute(url='/study-programs/')
 class StudyPrograms:
     @Debug(name='StudyPrograms')
     def __call__(self, request):
@@ -40,7 +39,7 @@ class NotFound404:
 
 
 # контроллер - список курсов
-@AppRoute(routes=routes, url='/courses-list/')
+@AppRoute(url='/courses-list/')
 class CoursesList:
     @Debug(name='CoursesList')
     def __call__(self, request):
@@ -56,7 +55,7 @@ class CoursesList:
 
 
 # контроллер - создать курс
-@AppRoute(routes=routes, url='/create-course/')
+@AppRoute(url='/create-course/')
 class CreateCourse:
     category_id = -1
 
@@ -94,7 +93,7 @@ class CreateCourse:
 
 
 # контроллер - создать категорию
-@AppRoute(routes=routes, url='/create-category/')
+@AppRoute(url='/create-category/')
 class CreateCategory:
     def __call__(self, request):
 
@@ -124,7 +123,7 @@ class CreateCategory:
 
 
 # контроллер - список категорий
-@AppRoute(routes=routes, url='/category-list/')
+@AppRoute(url='/category-list/')
 class CategoryList:
     def __call__(self, request):
         logger.log('Список категорий')
@@ -133,7 +132,7 @@ class CategoryList:
 
 
 # контроллер - копировать курс
-@AppRoute(routes=routes, url='/copy-course/')
+@AppRoute(url='/copy-course/')
 class CopyCourse:
     def __call__(self, request):
         request_params = request['request_params']
