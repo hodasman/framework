@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Courses list{% endblock %}
+{% block content %}
+<div><a href="/category-list/">Back in Categories</a></div>
+<div>
+    <br>
+    <h1>Courses list for category "{{name}}"</h1>
+    <ul>
+        {% for item in objects_list %}
+        <li>
+            {{item.name}}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<br>
+<div>
+    <a href="/create-course/?id={{id}}">
+        <button class="subscribe" type="submit">Create new course</button>
+    </a>
+</div>
+{% endblock content %}

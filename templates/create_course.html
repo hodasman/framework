@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Create course{% endblock %}
+{% block content %}
+
+<div>
+    <h1>Create course for category "{{name}}"</h1>
+    <form method="post">
+        <input type="text" name="name" placeholder="Название">
+        <button class="subscribe" type="submit">Save and back courses list</button>
+    </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Class schedule{% endblock %}
+{% block content %}
+
+<h1>Class schedule on {{date}}</h1>
+<table>
+        <tr class="head">
+            <th></th>
+            <th>Minsk</th>
+            <th>Vitebsk</th>
+            <th>Grodno</th>
+        </tr>
+        <tr>
+            <th>Initial course</th>
+            <td>St, 24 feb 2023<br />11:00 - 14:00</td>
+            <td>St, 6 march 2023<br />11:00 - 14:00</td>
+            <td>St, 20 march 2023<br />11:00 - 14:00</td>
+        </tr>
+        <tr class="even">
+            <th>Basics programming</th>
+            <td>St, 10 april 2023<br />11:00 - 13:00</td>
+            <td>St, 2 may 2023<br />11:00 - 13:00</td>
+            <td>St, 8 may 2023<br />11:00 - 13:00</td>
+        </tr>
+        <tr>
+            <th>Python</th>
+            <td>St, 26 june 2023<br />11:00 - 14:00</td>
+            <td>St, 3 july 2023<br />11:00 - 14:00</td>
+            <td>St, 10 july 2023<br />11:00 - 14:00</td>
+        </tr>
+        <tr class="even">
+            <th>WEB</th>
+            <td>St, 28 august 2023<br />11:00 - 16:00</td>
+            <td>St, 4 september 2023<br />11:00 - 16:00</td>
+            <td>St, 11 september 2023<br />11:00 - 16:00</td>
+        </tr>
+    </table>
+{% endblock content %}

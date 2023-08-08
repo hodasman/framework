@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Category list{% endblock %}
+{% block content %}
+
+<h1>List Catigories:</h1>
+<ul>
+
+    {% for item in objects_list %}
+    <li>
+        <a href="/courses-list/?id={{item.id}}">{{item.name}}</a>
+        <span>Количество курсов: {{item.course_count()}}</span>
+    </li>
+    {% endfor %}
+</ul>
+
+<div>
+
+    <a href="/create-category/">
+        <p>
+            <button class="subscribe" type="submit">Create new category</button>
+    </a>
+</div>
+
+{% endblock content %}
