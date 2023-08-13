@@ -48,7 +48,7 @@ class Debug:
                 delta = te - ts
 
                 print(f'debug --> {self.name} выполнялся {delta:2.2f} ms')
-                logger.log(f'debug --> {self.name} выполнялся {delta:2.2f} ms')
+                logger.log(logger, f'debug --> {self.name} выполнялся {delta:2.2f} ms')
                 return result
 
             return timed

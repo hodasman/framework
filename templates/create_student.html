@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Create student{% endblock %}
+{% block content %}
+
+<div>
+    <h1>Create student</h1>
+    <form method="post">
+        <div class="form_settings">
+            <input type="text" name="name" placeholder="Name">
+            <button class="subscribe" type="submit">Save</button>
+        </div>
+    </form>
+    <br />
+</div>
+<div>
+    <a href="/student-list/">
+        <button class="subscribe" type="submit">All students</button>
+    </a>
+</div>
+{% endblock content %}

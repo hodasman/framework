@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Enroll student{% endblock %}
+{% block content %}
+
+    <h1>Enroll a student in a course</h1>
+    <form method="post">
+        <div class="form_settings">
+            <select size="3" name="course_name">
+                {% for item in courses %}
+                <option value="{{item.name}}">{{item.name}}</option>
+                {% endfor %}
+            </select>
+            <select size="3" name="student_name">
+                {% for item in students %}
+                <option value="{{item.name}}">{{item.name}}</option>
+                {% endfor %}
+            </select>
+            <button class="subscribe" type="submit">Enroll</button>
+        </div>
+    </form>
+
+<div>
+    <a href="/student-list/"><button class="subscribe" type="submit">Список студентов</button></a>
+    <br /><br />
+    <a href="/create-student/"><button class="subscribe" type="submit">Создать студента</button></a>
+</div>
+{% endblock content %}

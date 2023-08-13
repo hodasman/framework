@@ -1,10 +1,13 @@
 from copy import deepcopy
 from quopri import decodestring
 from  datetime import datetime
+from patterns.behavioral_patterns import FileWriter, Subject
 
 
 # абстрактный пользователь
 class User:
+    def __init__(self, name):
+        self.name = name
     pass
 
 
@@ -15,7 +18,9 @@ class Teacher(User):
 
 # студент
 class Student(User):
-    pass
+    def __init__(self, name):
+        self.courses = []
+        super().__init__(name)
 
 
 class UserFactory:
@@ -26,8 +31,8 @@ class UserFactory:
 
     # порождающий паттерн Фабричный метод
     @classmethod
-    def create(cls, type_):
-        return cls.types[type_]()
+    def create(cls, type_, name):
+        return cls.types[type_](name)
 
 
 # порождающий паттерн Прототип
@@ -38,12 +43,23 @@ class CoursePrototype:
         return deepcopy(self)
 
 
-class Course(CoursePrototype):
+class Course(CoursePrototype, Subject):
 
     def __init__(self, name, category):
         self.name = name
         self.category = category
         self.category.courses.append(self)
+        self.students = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.students[item]
+
+    def add_student(self, student: Student):
+        self.students.append(student)
+        student.courses.append(self)
+        self.notify()
+        print(f'На курс {self.name} записался студент {student.name}')
 
 
 # интерактивный курс
@@ -95,8 +111,8 @@ class Engine:
         self.categories = []
 
     @staticmethod
-    def create_user(type_):
-        return UserFactory.create(type_)
+    def create_user(type_, name):
+        return UserFactory.create(type_, name)
 
     @staticmethod
     def create_category(name, category=None):
@@ -125,6 +141,11 @@ class Engine:
         val_decode_str = decodestring(val_b)
         return val_decode_str.decode('UTF-8')
 
+    def get_student(self, name) -> Student:
+        for item in self.students:
+            if item.name == name:
+                return item
+
 
 # порождающий паттерн Синглтон
 class SingletonByName(type):
@@ -148,11 +169,11 @@ class SingletonByName(type):
 
 class Logger(metaclass=SingletonByName):
 
-    def __init__(self, name):
+    def __init__(self, name, writer=FileWriter()):
         self.name = name
+        self.writer = writer
 
     @staticmethod
-    def log(text):
-        print('log--->', text)
-        with open('log.txt', 'a', encoding='utf-8') as f:
-            f.write(f'log--->{datetime.now()} {text} \n')
+    def log(self, text):
+        text = f'log--->{datetime.now()} {text} \n'
+        self.writer.write(text)

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Students list{% endblock %}
+{% block content %}
+
+<div>
+    <br>
+    <h1>All students</h1>
+    <ul>
+        {% for item in objects_list %}
+        <li>
+            {{item.name}} <b>enroll:</b>
+            {% for course in item.courses %}
+                 {{course.name}}
+            {% endfor %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<br>
+<div>
+    <a href="/create-student/">
+        <button class="subscribe" type="submit">Create new student</button>
+    </a>
+</div>
+<br>
+<div>
+    <a href="/add-student/">
+        <button class="subscribe" type="submit">Enroll a student in a course</button>
+    </a>
+
+</div>
+{% endblock content %}

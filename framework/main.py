@@ -31,14 +31,13 @@ class Framework:
             data = PostRequests().get_request_params(environ)
             msg_dict = Framework.decode_value(data)
             request['data'] = msg_dict
-            logger.log(f'Нам пришёл post-запрос: {Framework.decode_value(data)}')
-            # with open('message_data.txt', 'a', encoding='utf-8') as f:
-            #     f.write(f'{msg_dict.get("your_email")} - {msg_dict["your_enquiry"]} \n')
+            logger.log(logger, f'Нам пришёл post-запрос: {Framework.decode_value(data)}')
+
         if method == 'GET':
             request_params = GetRequests().get_request_params(environ)
             request['request_params'] = Framework.decode_value(request_params)
-            logger.log(f'Нам пришли GET-параметры:'
-                  f' {Framework.decode_value(request_params)}')
+            if Framework.decode_value(request_params):
+                logger.log(logger, f'Нам пришли GET-параметры: {Framework.decode_value(request_params)}')
 
             # находим нужный контроллер
             # отработка паттерна page controller
