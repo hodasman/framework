@@ -134,11 +134,12 @@ class CreateCategory:
 
 # контроллер - список категорий
 @AppRoute(url='/category-list/')
-class CategoryList:
-    def __call__(self, request):
-        logger.log(logger, 'Список категорий')
-        return '200 OK', render('category_list.html',
-                                objects_list=site.categories)
+class CategoryList(ListView):
+    template_name = 'category_list.html'
+
+    def get_queryset(self):
+        mapper = MapperRegistry.get_current_mapper('category')
+        return mapper.all()
 
 
 # контроллер - копировать курс
