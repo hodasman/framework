@@ -253,7 +253,7 @@ class CategoryMapper:
         return result
 
     def find_by_id(self, id):
-        statement = f"SELECT id, name FROM {self.tablename} WHERE id=?"
+        statement = f"SELECT id, category_name FROM {self.tablename} WHERE id=?"
         self.cursor.execute(statement, (id,))
         result = self.cursor.fetchone()
         if result:
@@ -262,7 +262,7 @@ class CategoryMapper:
             raise RecordNotFoundException(f'record with id={id} not found')
 
     def insert(self, obj):
-        statement = f"INSERT INTO {self.tablename} (name) VALUES (?)"
+        statement = f"INSERT INTO {self.tablename} (category_name) VALUES (?)"
         self.cursor.execute(statement, (obj.name,))
         try:
             self.connection.commit()
@@ -270,7 +270,7 @@ class CategoryMapper:
             raise DbCommitException(e.args)
 
     def update(self, obj):
-        statement = f"UPDATE {self.tablename} SET name=? WHERE id=?"
+        statement = f"UPDATE {self.tablename} SET category_name=? WHERE id=?"
 
         self.cursor.execute(statement, (obj.name, obj.id))
         try:
