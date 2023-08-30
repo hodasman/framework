@@ -122,6 +122,8 @@ class CreateCategory:
             new_category = site.create_category(name, category)
 
             site.categories.append(new_category)
+            new_category.mark_new()
+            UnitOfWork.get_current().commit()
 
             return '200 OK', render('category_list.html', objects_list=site.categories)
         else:
