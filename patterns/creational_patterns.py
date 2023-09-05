@@ -46,7 +46,7 @@ class CoursePrototype:
         return deepcopy(self)
 
 
-class Course(CoursePrototype, Subject):
+class Course(CoursePrototype, Subject, DomainObject):
 
     def __init__(self, name, category):
         self.name = name
@@ -108,10 +108,13 @@ class Category(DomainObject):
 # основной интерфейс проекта
 class Engine:
     def __init__(self):
+        categories_mapper = MapperRegistry.get_current_mapper('category')
+        students_mapper = MapperRegistry.get_current_mapper('student')
+        courses_mapper = MapperRegistry.get_current_mapper('course')
         self.teachers = []
-        self.students = []
-        self.courses = []
-        self.categories = []
+        self.students = students_mapper.all()
+        self.courses = courses_mapper.all()
+        self.categories = categories_mapper.all()
 
     @staticmethod
     def create_user(type_, name):
@@ -286,6 +289,64 @@ class CategoryMapper:
         except Exception as e:
             raise DbDeleteException(e.args)
 
+
+class CourseMapper:
+
+    def __init__(self, connection):
+        self.connection = connection
+        self.cursor = connection.cursor()
+        self.cursor_2 = connection.cursor()
+        self.tablename = 'courses'
+        self.tablename_2 = 'categories'
+
+    def all(self):
+        statement = f'SELECT * from {self.tablename}'
+        statement_2 = f"SELECT id, category_name FROM {self.tablename_2} WHERE id=?"
+        self.cursor.execute(statement)
+        result = []
+        for item in self.cursor.fetchall():
+            id, category_id, name = item
+            self.cursor_2.execute(statement_2, (category_id,))
+            category_name = self.cursor_2.fetchone()
+            category = Category(category_name, category=None)
+            course = Course(name, category)
+            result.append(course)
+        return result
+
+    def find_by_id(self, id):
+        statement = f"SELECT id, category_name FROM {self.tablename} WHERE id=?"
+        self.cursor.execute(statement, (id,))
+        result = self.cursor.fetchone()
+        if result:
+            return Category(*result)
+        else:
+            raise RecordNotFoundException(f'record with id={id} not found')
+
+    def insert(self, obj):
+        statement = f"INSERT INTO {self.tablename} (name, category_id) VALUES (?, ?)"
+        self.cursor.execute(statement, (obj.name, obj.category.id))
+        try:
+            self.connection.commit()
+        except Exception as e:
+            raise DbCommitException(e.args)
+
+    def update(self, obj):
+        statement = f"UPDATE {self.tablename} SET category_name=? WHERE id=?"
+
+        self.cursor.execute(statement, (obj.name, obj.id))
+        try:
+            self.connection.commit()
+        except Exception as e:
+            raise DbUpdateException(e.args)
+
+    def delete(self, obj):
+        statement = f"DELETE FROM {self.tablename} WHERE id=?"
+        self.cursor.execute(statement, (obj.id,))
+        try:
+            self.connection.commit()
+        except Exception as e:
+            raise DbDeleteException(e.args)
+
 connection = connect('base.sqlite')
 
 
@@ -293,7 +354,8 @@ connection = connect('base.sqlite')
 class MapperRegistry:
     mappers = {
         'student': StudentMapper,
-        'category': CategoryMapper
+        'category': CategoryMapper,
+        'course': CourseMapper
     }
 
     @staticmethod
@@ -306,6 +368,10 @@ class MapperRegistry:
         if isinstance(obj, Category):
 
             return CategoryMapper(connection)
+
+        if isinstance(obj, Course):
+
+            return CourseMapper(connection)
 
     @staticmethod
     def get_current_mapper(name):
