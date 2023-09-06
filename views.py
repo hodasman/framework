@@ -48,13 +48,12 @@ class NotFound404:
 # контроллер - список курсов
 @AppRoute(url='/courses-list/')
 class CoursesList:
-    @Debug(name='CoursesList')
     def __call__(self, request):
         logger.log(logger, 'Список курсов')
         try:
             category = site.find_category_by_id(
                 int(request['request_params']['id']))
-            print(request['request_params']['id'])
+
             return '200 OK', render('courses_list.html',
                                     objects_list=category.courses,
                                     name=category.name, id=category.id)

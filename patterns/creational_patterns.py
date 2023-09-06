@@ -113,8 +113,12 @@ class Engine:
         courses_mapper = MapperRegistry.get_current_mapper('course')
         self.teachers = []
         self.students = students_mapper.all()
-        self.courses = courses_mapper.all()
+        self.courses = []
         self.categories = categories_mapper.all()
+        for cat in self.categories:
+            courses_category = courses_mapper.all_for_category(cat)
+            self.courses.extend(courses_category)
+            cat = Category(cat.name, cat)
 
     @staticmethod
     def create_user(type_, name):
@@ -151,6 +155,9 @@ class Engine:
         for item in self.students:
             if item.name == name:
                 return item
+
+
+
 
 
 # порождающий паттерн Синглтон
@@ -299,28 +306,17 @@ class CourseMapper:
         self.tablename = 'courses'
         self.tablename_2 = 'categories'
 
-    def all(self):
-        statement = f'SELECT * from {self.tablename}'
-        statement_2 = f"SELECT id, category_name FROM {self.tablename_2} WHERE id=?"
-        self.cursor.execute(statement)
-        result = []
+    def all_for_category(self, category):
+        res = []
+        statement = f'SELECT * from {self.tablename} WHERE category_id=?'
+        self.cursor.execute(statement, (category.id,))
         for item in self.cursor.fetchall():
             id, category_id, name = item
-            self.cursor_2.execute(statement_2, (category_id,))
-            category_name = self.cursor_2.fetchone()
-            category = Category(category_name, category=None)
             course = Course(name, category)
-            result.append(course)
-        return result
+            res.append(course)
+        return res
 
-    def find_by_id(self, id):
-        statement = f"SELECT id, category_name FROM {self.tablename} WHERE id=?"
-        self.cursor.execute(statement, (id,))
-        result = self.cursor.fetchone()
-        if result:
-            return Category(*result)
-        else:
-            raise RecordNotFoundException(f'record with id={id} not found')
+
 
     def insert(self, obj):
         statement = f"INSERT INTO {self.tablename} (name, category_id) VALUES (?, ?)"
