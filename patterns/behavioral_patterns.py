@@ -69,6 +69,7 @@ class ListView(TemplateView):
     template_name = 'list.html'
     context_object_name = 'objects_list'
 
+
     def get_queryset(self):
         print(self.queryset)
         return self.queryset

@@ -7,6 +7,7 @@ from patterns.behavioral_patterns import EmailNotifier, SmsNotifier, \
     ListView, CreateView, BaseSerializer
 from patterns.architectural_system_pattern import UnitOfWork
 
+
 site = Engine()
 logger = Logger('main')
 email_notifier = EmailNotifier()
@@ -47,12 +48,12 @@ class NotFound404:
 # контроллер - список курсов
 @AppRoute(url='/courses-list/')
 class CoursesList:
-    @Debug(name='CoursesList')
     def __call__(self, request):
         logger.log(logger, 'Список курсов')
         try:
             category = site.find_category_by_id(
                 int(request['request_params']['id']))
+
             return '200 OK', render('courses_list.html',
                                     objects_list=category.courses,
                                     name=category.name, id=category.id)
@@ -70,18 +71,21 @@ class CreateCourse:
         if request['method'] == 'POST':
             # метод пост
             data = request['data']
-
+            print(request)
             name = data['name']
             name = site.decode_value(name)
 
             category = None
             if self.category_id != -1:
+                print(self.category_id)
                 category = site.find_category_by_id(int(self.category_id))
 
                 course = site.create_course('record', name, category)
                 course.observers.append(email_notifier)
                 course.observers.append(sms_notifier)
                 site.courses.append(course)
+                course.mark_new()
+                UnitOfWork.get_current().commit()
                 logger.log(logger, f'Создали курс {name} в категории {category.name}')
             return '200 OK', render('courses_list.html',
                                     objects_list=category.courses,
@@ -102,41 +106,57 @@ class CreateCourse:
 
 # контроллер - создать категорию
 @AppRoute(url='/create-category/')
-class CreateCategory:
-    def __call__(self, request):
+class CreateCategory(CreateView):
+    template_name = 'create_category.html'
 
-        if request['method'] == 'POST':
-            # метод пост
-
-            data = request['data']
-
-            name = data['name']
-            name = site.decode_value(name)
-
-            category_id = data.get('category_id')
-
-            category = None
-            if category_id:
-                category = site.find_category_by_id(int(category_id))
-
-            new_category = site.create_category(name, category)
-
-            site.categories.append(new_category)
-
-            return '200 OK', render('category_list.html', objects_list=site.categories)
-        else:
-            categories = site.categories
-            return '200 OK', render('create_category.html',
-                                    categories=categories)
+    def create_obj(self, data: dict):
+        name = data['name']
+        name = site.decode_value(name)
+        category_id = data.get('category_id')
+        category = None
+        if category_id:
+            category = site.find_category_by_id(int(category_id))
+        new_category = site.create_category(name, category)
+        site.categories.append(new_category)
+        new_category.mark_new()
+        UnitOfWork.get_current().commit()
+    # def __call__(self, request):
+    #
+    #     if request['method'] == 'POST':
+    #         # метод пост
+    #
+    #         data = request['data']
+    #
+    #         name = data['name']
+    #         name = site.decode_value(name)
+    #
+    #         category_id = data.get('category_id')
+    #
+    #         category = None
+    #         if category_id:
+    #             category = site.find_category_by_id(int(category_id))
+    #
+    #         new_category = site.create_category(name, category)
+    #
+    #         site.categories.append(new_category)
+    #         new_category.mark_new()
+    #         UnitOfWork.get_current().commit()
+    #
+    #         return '200 OK', render('category_list.html', objects_list=site.categories)
+    #     else:
+    #         categories = site.categories
+    #         return '200 OK', render('create_category.html',
+    #                                 categories=categories)
 
 
 # контроллер - список категорий
 @AppRoute(url='/category-list/')
-class CategoryList:
-    def __call__(self, request):
-        logger.log(logger, 'Список категорий')
-        return '200 OK', render('category_list.html',
-                                objects_list=site.categories)
+class CategoryList(ListView):
+    template_name = 'category_list.html'
+
+    def get_queryset(self):
+        mapper = MapperRegistry.get_current_mapper('category')
+        return mapper.all()
 
 
 # контроллер - копировать курс
