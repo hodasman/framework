@@ -110,15 +110,14 @@ class Engine:
     def __init__(self):
         categories_mapper = MapperRegistry.get_current_mapper('category')
         students_mapper = MapperRegistry.get_current_mapper('student')
-        courses_mapper = MapperRegistry.get_current_mapper('course')
+
         self.teachers = []
         self.students = students_mapper.all()
         self.courses = []
         self.categories = categories_mapper.all()
         for cat in self.categories:
-            courses_category = courses_mapper.all_for_category(cat)
-            self.courses.extend(courses_category)
-            cat = Category(cat.name, cat)
+            self.courses.extend(cat.courses)
+
 
     @staticmethod
     def create_user(type_, name):
@@ -260,6 +259,8 @@ class CategoryMapper:
             category = Category(name, category=None)
             category.id = id
             result.append(category)
+            mapper = MapperRegistry.get_current_mapper('course')
+            mapper.all_for_category(category)
         return result
 
     def find_by_id(self, id):
@@ -302,9 +303,7 @@ class CourseMapper:
     def __init__(self, connection):
         self.connection = connection
         self.cursor = connection.cursor()
-        self.cursor_2 = connection.cursor()
         self.tablename = 'courses'
-        self.tablename_2 = 'categories'
 
     def all_for_category(self, category):
         res = []
